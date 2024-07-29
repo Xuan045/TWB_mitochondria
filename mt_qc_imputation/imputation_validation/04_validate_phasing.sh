@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 
+# Follow the steps in the mt_qc_imputation/
 mtqcdir=/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/qc_twb2
 WKDIR="/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/validate_imputation/wgs1000.validate.shapeit2.impute2.rm_deviate"
 mkdir -p ${WKDIR}
@@ -37,20 +38,20 @@ $PLINK2 \
 WGS_VCF="/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/validate_imputation/wgs_split/recode_vcf/TWB1465_wgs_recode.vcf"
 python /staging/biology/u4432941/TWB1492_mt/microarray/misc/remove_deviate.py ${WGS_VCF} ${WKDIR}/${PARA} > ${WKDIR}/non_deviate.snplist
 
-# Find strand ambiguous SNPs
-python /staging/biology/u4432941/TWB1492_mt/microarray/misc/find_atgc_snps.py ${INPUT}.bim > ${WKDIR}/atcg.snplist
-# Write a list of non-strand ambiguous SNPs to keep
-awk 'NR==FNR{a[$1];next} !($2 in a) {print $2}' ${WKDIR}/atcg.snplist ${INPUT}.bim > ${WKDIR}/ref_nonatgc.snplist
+# # Find strand ambiguous SNPs
+# python /staging/biology/u4432941/TWB1492_mt/microarray/misc/find_atgc_snps.py ${INPUT}.bim > ${WKDIR}/atcg.snplist
+# # Write a list of non-strand ambiguous SNPs to keep
+# awk 'NR==FNR{a[$1];next} !($2 in a) {print $2}' ${WKDIR}/atcg.snplist ${INPUT}.bim > ${WKDIR}/ref_nonatgc.snplist
 
-# Combine two lists
-sort ${WKDIR}/non_deviate.snplist > ${WKDIR}/sorted_non_deviate.snplist
-sort ${WKDIR}/ref_nonatgc.snplist > ${WKDIR}/sorted_ref_nonatgc.snplist
-comm -12 ${WKDIR}/sorted_non_deviate.snplist ${WKDIR}/sorted_ref_nonatgc.snplist > ${WKDIR}/keep.snplist
+# # Combine two lists
+# sort ${WKDIR}/non_deviate.snplist > ${WKDIR}/sorted_non_deviate.snplist
+# sort ${WKDIR}/ref_nonatgc.snplist > ${WKDIR}/sorted_ref_nonatgc.snplist
+# comm -12 ${WKDIR}/sorted_non_deviate.snplist ${WKDIR}/sorted_ref_nonatgc.snplist > ${WKDIR}/keep.snplist
 
 $PLINK2 \
     --bfile ${INPUT} \
     --output-chr chrM \
-    --extract ${WKDIR}/keep.snplist \
+    --extract ${WKDIR}/non_deviate.snplist \
     --make-bed \
     --out ${WKDIR}/${PARA}
 
@@ -71,12 +72,11 @@ sed -i '2d' ${WKDIR}/${ref_para}.ref.oxf.sample
 cut -d' ' -f2,3,4,5 < ${WKDIR}/${ref_para}.ref.oxf.gen > ${WKDIR}/${ref_para}.ref.legend
 echo "rsID position a0 a1" > ${WKDIR}/header1.txt
 cat ${WKDIR}/header1.txt ${WKDIR}/${ref_para}.ref.legend > ${WKDIR}/fin.${ref_para}.ref.legend
+
 # For SEX column, change all female (2) to male (1) so that all samples are haploid
 # awk 'NR <= 2 {print; next} {gsub(/2/, 1, $6)} 1' ${WKDIR}/twb2.shapeit2.sample > ${WKDIR}/fin.twb2.shapeit2.sample
 
 # 3. Imputation
-# -h -l 是放reference panel
-# -g 是放要做imputation的
 ${IMPUTE2} \
     -merge_ref_panels \
     -m $mtmap \
