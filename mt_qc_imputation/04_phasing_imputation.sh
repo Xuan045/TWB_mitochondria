@@ -1,14 +1,24 @@
 #!/usr/bin/bash
+#SBATCH -A MST109178        # Account name/project number
+#SBATCH -J imputation  # Job name
+#SBATCH -p ngs92G           # Partition Name 
+#SBATCH -c 14               
+#SBATCH --mem=92G           # memory used
+#SBATCH -o out.log          # Path to the standard output file 
+#SBATCH -e err.log          # Path to the standard error ouput file
+#SBATCH --mail-user=judychou60@gmail.com
+#SBATCH --mail-type=END
 
 mtqcdir=/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/qc_twb2_final
-WKDIR=/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/imputation/wgs1465.shapeit2.impute2.pre_impute_filter_king_eas_2
+WKDIR=/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/imputation/wgs1465.shapeit2.impute2.eas.king
 mkdir -p $WKDIR
 cd $WKDIR
 
-INPUT="${mtqcdir}/twb2_mind02_geno02_mono_EAS_kingMT_2"
+INPUT="${mtqcdir}/twb2_mind02_geno02_mono_EAS_king"
 PARA="twb2_study"
-gmap="/staging/biology/u4432941/TWB1492_mt/microarray/gmap/chrMT.NC012920.gmap"
-mtmap="/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/mtgeneticmap.map"
+misc_dir="/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/misc"
+gmap="${misc_dir}/chrMT.NC_012920.1.gmap"
+mtmap="${misc_dir}/mtgeneticmap.map"
 ref_panel="/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/validate_imputation/wgs_split/recode_vcf/TWB1465_wgs_recode.vcf.gz"
 ref_para="wgs1465"
 
@@ -23,7 +33,7 @@ logfile=${WKDIR}/${TIME}_twb_phasing_imputation.log
 exec > "$logfile" 2>&1
 module load pkg/Anaconda3
 
-# 1. Phasing of study genotypes with SHAPEIT2 (針對study GT (要imputation) 的做phasing)
+# 1. Phasing of study genotypes with SHAPEIT2
 # Filter out variants with AF deviated from WGS (AF_diff > 0.2)
 # First get gcount file using PLINK
 $PLINK2 \
@@ -34,17 +44,7 @@ $PLINK2 \
 
 # Filter out variants with AF difference with WGS greater than 0.2 using python script
 WGS_VCF="/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/validate_imputation/wgs_split/recode_vcf/TWB1465_wgs_recode.vcf"
-python /staging/biology/u4432941/TWB1492_mt/microarray/misc/remove_deviate.py ${WGS_VCF} ${WKDIR}/${PARA} > ${WKDIR}/non_deviate.snplist
-
-# # Find strand ambiguous SNPs
-# python /staging/biology/u4432941/TWB1492_mt/microarray/misc/find_atgc_snps.py ${INPUT}.bim > ${WKDIR}/atcg.snplist
-# # Write a list of non-strand ambiguous SNPs to keep
-# awk 'NR==FNR{a[$1];next} !($2 in a) {print $2}' ${WKDIR}/atcg.snplist ${INPUT}.bim > ${WKDIR}/ref_nonatgc.snplist
-
-# # Combine two lists
-# sort ${WKDIR}/non_deviate.snplist > ${WKDIR}/sorted_non_deviate.snplist
-# sort ${WKDIR}/ref_nonatgc.snplist > ${WKDIR}/sorted_ref_nonatgc.snplist
-# comm -12 ${WKDIR}/sorted_non_deviate.snplist ${WKDIR}/sorted_ref_nonatgc.snplist > ${WKDIR}/keep.snplist
+python ${misc_dir}/remove_deviate.py ${WGS_VCF} ${WKDIR}/${PARA} > ${WKDIR}/non_deviate.snplist
 
 $PLINK2 \
     --bfile ${INPUT} \
@@ -80,4 +80,4 @@ ${IMPUTE2} \
     -known_haps_g $WKDIR/twb2.shapeit2.haps \
     -int 1 16579 \
     -Ne 20000 \
-    -o ${WKDIR}/twb2.EAS_kingMT.shapeit2.impute2.diploid
+    -o ${WKDIR}/twb2.EAS_king.shapeit2.impute2.diploid

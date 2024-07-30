@@ -1,4 +1,11 @@
 #!/usr/bin/bash
+#SBATCH -A MST109178        # Account name/project number
+#SBATCH -J Exlude  # Job name
+#SBATCH -p ngs186G           # Partition Name 
+#SBATCH -c 28               
+#SBATCH --mem=186G           # memory used
+#SBATCH --mail-user=
+#SBATCH --mail-type=END
 
 #twb1
 # batch='1'
@@ -24,10 +31,10 @@ exec > "$logfile" 2>&1
 
 # merge two lists
 eas_indv="/staging/biology/u4432941/TWB1492_mt/microarray/pca_twb2/twb2_1kg_predpop0.8_non_EAS_indvlist"
-related_indv="/staging/biology/u4432941/TWB1492_mt/microarray/preqc_twb2/twb2_EAS_king_mt.indvlist"
-cat "$related_indv" "$eas_indv" | sort | uniq > ${mtqcdir}/twb${batch}_rm_EAS_kingMT.indv
+related_indv="/staging/biology/u4432941/TWB1492_mt/microarray/preqc_twb2/twb2_EAS_king.indvlist"
+cat "$related_indv" "$eas_indv" | sort | uniq > ${mtqcdir}/twb${batch}_rm_EAS_king.indv
 
-PARA="mind02_geno02_mono_EAS_kingMT_2"
+PARA="mind02_geno02_mono_EAS_king"
 $PLINK2 \
     --bfile ${mtqcdir}/twb${batch}_geno05_mind02_geno02_mono \
     --remove ${mtqcdir}/twb${batch}_rm_EAS_kingMT.indv \
