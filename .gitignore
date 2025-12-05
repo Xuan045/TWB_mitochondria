@@ -1,7 +1,7 @@
 # Custome annotation files
-custom_annotation/gnomad_af.vcf.bgz
-custom_annotation/gnomad_af.vcf.bgz.tbi
-custom_annotation/twb1465_af.vcf.bgz
-custom_annotation/twb1465_af.vcf.bgz.tbi
+scripts/create_vep_custom_annotation/gnomad_af.vcf.bgz
+scripts/create_vep_custom_annotation/gnomad_af.vcf.bgz.tbi
+scripts/create_vep_custom_annotation/twb1465_af.vcf.bgz
+scripts/create_vep_custom_annotation/twb1465_af.vcf.bgz.tbi
 
-chrM_ref/*
+chrM_ref
