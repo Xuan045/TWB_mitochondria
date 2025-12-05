@@ -1,11 +1,4 @@
 #!/usr/bin/bash
-#SBATCH -A MST109178        # Account name/project number
-#SBATCH -J Exlude  # Job name
-#SBATCH -p ngs186G           # Partition Name 
-#SBATCH -c 28               
-#SBATCH --mem=186G           # memory used
-#SBATCH --mail-user=
-#SBATCH --mail-type=END
 
 #twb1
 # batch='1'
@@ -22,7 +15,6 @@ mtqcdir=/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/qc_twb${batch}_fin
 mkdir -p $mtqcdir
 
 PLINK2="/opt/ohpc/Taiwania3/pkg/biology/PLINK2/PLINK_v2.00a2.3_AVX2/plink2"
-# KING_IN="/staging/biology/u4432941/TWB1492_mt/microarray/qc_twb2/twb2_btqc_ldpr_king01.king.cutoff.in.id"
 
 TIME=`date +%Y%m%d%H%M`
 logfile=${mtqcdir}/${TIME}_twb${batch}_king.log

@@ -1,13 +1,4 @@
 #!/usr/bin/bash
-#SBATCH -A MST109178        # Account name/project number
-#SBATCH -J imputation  # Job name
-#SBATCH -p ngs92G           # Partition Name 
-#SBATCH -c 14               
-#SBATCH --mem=92G           # memory used
-#SBATCH -o out.log          # Path to the standard output file 
-#SBATCH -e err.log          # Path to the standard error ouput file
-#SBATCH --mail-user=judychou60@gmail.com
-#SBATCH --mail-type=END
 
 mtqcdir=/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/qc_twb2_final
 WKDIR=/staging/biology/u4432941/TWB1492_mt/microarray/mt_qc/imputation/wgs1465.shapeit2.impute2.eas.king
