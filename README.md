@@ -24,7 +24,7 @@ This repository contains scripts and workflows used to:
 **Important:**  
 Raw TWB data (WGS, genotyping arrays, phenotypes) are **not** included in this repository due to data sharing restrictions.  
 Researchers interested in accessing TWB data must apply through the Taiwan Biobank.
-
+<!--
 ---
 
 ## Repository Structure
@@ -69,3 +69,4 @@ This analysis was performed on a Linux HPC environment.
 - **R** ≥ 4.0 – Statistical analysis and visualization  
   - Required packages: tidyverse, data.table, pegas, ade4, vcfr, poppr, etc.
 
+-->
