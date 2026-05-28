@@ -24,19 +24,17 @@ This repository contains scripts and workflows used to:
 **Important:**  
 Raw TWB data (WGS, genotyping arrays, phenotypes) are **not** included in this repository due to data sharing restrictions.  
 Researchers interested in accessing TWB data must apply through the Taiwan Biobank.
-<!--
 ---
 
 ## Repository Structure
 
-```
-env/                    # Conda/R environment files
-config/                 # Example path config, phenotype definitions
-workflow/               # High-level sequential workflows
-scripts/                # Individual analysis and plotting scripts
-example_data/           # Toy VCF/phenotype for demonstration (no TWB data)
-docs/                   # Figure mapping and extra notes
-```
+- [01_chrM_variant_calling](file:///staging/biology/u4432941/Github/TWB_mitochondria/01_chrM_variant_calling/): Calling mitochondrial DNA variants from WGS.
+- [02_amova](file:///staging/biology/u4432941/Github/TWB_mitochondria/02_amova/): Assignments and analysis of population structure.
+- [03_autosomal_qc](file:///staging/biology/u4432941/Github/TWB_mitochondria/03_autosomal_qc/): Quality control scripts for autosomal genotyping array data.
+- [04_mt_qc_imputation](file:///staging/biology/u4432941/Github/TWB_mitochondria/04_mt_qc_imputation/): QC and imputation of mtDNA variants on genotyping arrays.
+- [05_association](file:///staging/biology/u4432941/Github/TWB_mitochondria/05_association/): Statistical association testing (PheWAS).
+- [scripts](file:///staging/biology/u4432941/Github/TWB_mitochondria/scripts/): Plotting, figures, and formatting helper scripts.
+- [custom_annotation](file:///staging/biology/u4432941/Github/TWB_mitochondria/custom_annotation/): Prepared annotation databases (gnomAD, TWB) used in custom annotation step.
 
 ---
 
@@ -52,7 +50,7 @@ The workflow requires several public datasets (not included here), such as:
 - 1000 Genomes Project Phase 3 (mtDNA and nuclear variants)  
 - HaploGrep2 reference files  
 
-Configure paths in `config/paths_example.yaml`.
+Configure paths in [04_mt_qc_imputation/config.sh](file:///staging/biology/u4432941/Github/TWB_mitochondria/04_mt_qc_imputation/config.sh).
 
 ---
 
@@ -66,7 +64,5 @@ This analysis was performed on a Linux HPC environment.
 - **bcftools / htslib / vcftools** – VCF processing  
 - **PLINK** 1.9 / 2.0 – Covariates & QC  
 - **HaploGrep2** – Haplogroup assignment  
-- **R** ≥ 4.0 – Statistical analysis and visualization  
-  - Required packages: tidyverse, data.table, pegas, ade4, vcfr, poppr, etc.
-
--->
+- **R** &ge; 4.0 – Statistical analysis and visualization  
+  - Required packages: `tidyverse`, `data.table`, `pegas`, `ade4`, `vcfr`, `poppr`, etc.

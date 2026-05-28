@@ -5,3 +5,11 @@ scripts/create_vep_custom_annotation/twb1465_af.vcf.bgz
 scripts/create_vep_custom_annotation/twb1465_af.vcf.bgz.tbi
 
 chrM_ref
+
+# macOS System Files
+.DS_Store
+**/.DS_Store
+
+# Local analysis output files
+analysis/
+
